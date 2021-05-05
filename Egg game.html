@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Page Title</title>
+        <style>
+          img{
+            display: none;
+          }
+          #canvas {
+            /* display: none;
+            background-color: bisque;
+            border: brown;
+            border-width: 2px; */
+            margin-left: 500px;
+            margin-top: 50px;            
+          }
+          #canvas_for_start{
+              margin-left: 500px;
+              margin-top: 50px;
+          }
+      
+        </style>
+    </head>
+    <body>
+        <canvas id="canvas_for_start" width="350px" height="600px" style="background-Color:grey;position:fixed"></canvas>
+        <canvas id="canvas" width="350px" height="552px" style="background-Color:white"></canvas>
+        <img id="egg" src="egg.jpeg">
+        <img id="basket" src="basket.jpeg">
+        
+        <script>
+    var egg1=document.getElementById("egg")
+    var basket=document.getElementById("basket")
+ var can=document.getElementById("canvas")
+var c=can.getContext("2d")
+
+
+
+var can_start=document.getElementById("canvas_for_start")
+var c_start=can_start.getContext("2d")
+c_start.font="bold 20px Arial"
+c_start.fillStyle="black"
+c_start.fillText("CLICK TO START",100,300)
+
+//         STARTS FROM HERE 
+can_start.addEventListener("click",()=>{
+start()
+})
+
+
+var height=can.height
+var width=can.width
+var score=0
+var life=3
+class CreateEgg{
+    constructor(x,y,side){
+        this.x=x
+        this.y=y
+        this.s=side
+        this.color="red"
+    }
+    draw(){
+       // c.clearRect(this.x*this.s,this.y,this.s,this.s)
+       // c.fillStyle=this.color
+        c.drawImage(egg1,this.x*this.s,this.y,this.s,this.s)
+        this.move();
+        this.condition()
+    }
+    move(){
+        if(this.y==height-100)
+        {
+        this.y=0
+        this.x=Math.floor(Math.random()*7)
+        }
+        else{
+            this.y=this.y+2
+        }
+    }
+    condition(){
+      if(this.y==height-100)
+      {
+          if((this.x*this.s)==cordinate.right)
+          score++
+          else
+          {
+          life--
+          navigator.vibrate(100)
+          end()
+          }
+          
+      }
+    }
+}
+
+//           EGG DROPING 
+
+var x=Math.floor(Math.random()*7)
+var egg=new CreateEgg(x,0,50)            //object of class CreateEgg
+function run(){
+c.clearRect(0,0,width,height-50)
+c.font="bold 25px Arial"
+c.fillStyle="black"
+c.fillText("SCORE : "+score,200,30)
+c.fillText("LIFE : "+life,10,30)
+    egg.draw()
+}
+var time
+function start()
+{
+can_start.style.display="none"
+time=setInterval(run,5)
+}
+
+
+
+
+// BASKET MOVEMENT 
+
+
+    var cordinate={
+        right:100
+    }
+    c.fillStyle="blue"
+    c.drawImage(basket,cordinate.right,height-50,50,50)
+    window.addEventListener("keydown",function(e){
+      //  cordinate.x=e.clientX // x-coordinate of touch 
+        if(e.keyCode===39)     {
+    c.clearRect(cordinate.right,height-50,50,50)    
+            c.fillStyle="blue"
+            cordinate.right=cordinate.right+50
+            if(cordinate.right>=300)
+            cordinate.right=300
+    c.drawImage(basket,cordinate.right,height-50,50,50)
+           // console.log(cordinate.right)
+        }
+        if(e.keyCode===37){
+     c.clearRect(cordinate.right,height-50,50,50)
+            cordinate.right=cordinate.right-50
+            c.fillStyle="blue"
+            if(cordinate.right<=0)
+            cordinate.right=0
+     c.drawImage(basket,cordinate.right,height-50,50,50)
+        }
+      // console.log(cordinate.right)
+    })
+    
+function end(){
+    alert("SCORE : "+score+"                     "+"LIFES LEFT : "+life)
+    if(life==0)
+    {
+        can.style.display="none"
+        alert("TOTAL SCORE : "+score)
+        clearInterval(time)
+    }
+}
+
+        </script>
+    </body>
+</html>
